@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+    mysql:
+        image: mysql:8.0
+        ports: ['3306:3306']
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=symfony
+            - MYSQL_USER=symfony
+            - MYSQL_PASSWORD=password
+        networks:
+            - codecooler
+    php:
+        build:
+            context: ./User-service/docker/php-fpm
+            dockerfile: Dockerfile
+        ports: ['9000:9000']
+        volumes: ['./User-service/docker/symfony/:/var/www/symfony:cached']
+        networks:
+            - codecooler
+    nginx:
+        build:
+            context: ./User-service/docker/nginx
+            dockerfile: Dockerfile
+        ports: ['8080:80']
+        volumes: ['./User-service/docker/symfony/:/var/www/symfony:cached']
+        networks:
+            - codecooler
+    react-client:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        volumes:
+            - './client:/app'
+            - '/app/node_modules'
+        networks:
+            - codecooler
+        ports:
+            - 3000:3000
+        stdin_open: true
+
+networks:
+    codecooler:
