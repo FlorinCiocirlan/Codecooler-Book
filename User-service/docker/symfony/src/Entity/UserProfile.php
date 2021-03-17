@@ -47,6 +47,11 @@ class UserProfile
      */
     private $city;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $user_id;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +125,18 @@ class UserProfile
     public function setCity(string $city): self
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function getUserId(): ?string
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(string $user_id): self
+    {
+        $this->user_id = $user_id;
 
         return $this;
     }

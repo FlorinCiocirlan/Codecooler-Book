@@ -11,8 +11,6 @@ ENV PATH /app/node_modules/.bin:$PATH
 # install app dependencies
 COPY package.json ./
 RUN npm install --silent
-RUN npm install react-router-dom
-RUN npm install axios
 
 
 RUN npm install react-scripts@4.0.3 -g --silent

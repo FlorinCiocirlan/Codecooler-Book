@@ -38,6 +38,25 @@ services:
         ports:
             - 3000:3000
         stdin_open: true
+    authentication-service:
+        build:
+            context: ./Authentication-service
+            dockerfile: Dockerfile
+        volumes:
+            - './Authentication-service:/usr/src/app'
+        networks:
+            - codecooler
+        ports:
+            - 4005:4000
+    mongodb:
+        container_name: mongo
+        image: mongo
+        volumes:
+            - './mongodb:/data/db'
+        networks:
+            - codecooler
+        ports:
+            - 27017:27017
 
 networks:
     codecooler:

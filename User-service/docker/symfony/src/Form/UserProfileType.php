@@ -19,6 +19,7 @@ class UserProfileType extends AbstractType
             ->add('age')
             ->add('country')
             ->add('city')
+            ->add('userId')
             ->add('profilePhoto', FileType::class, [
                 'required'=>true,
                 'mapped' =>false

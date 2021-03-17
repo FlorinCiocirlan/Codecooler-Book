@@ -1,60 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
+
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Profile.css';
 import { FaArrowRight } from 'react-icons/fa';
-import { AiOutlineHome } from 'react-icons/ai';
+import { TiHome } from 'react-icons/ti';
 import { ImLocation } from 'react-icons/im';
 import NoUser from '../images/no-user.png';
+import Loader from 'react-loader-spinner';
 
-export default function Profile() {
-	const [user, setUser] = useState();
-	const [fetched, setFetched] = useState(false);
-	const [firstName, setFirstName] = useState('loading');
-	const [lastName, setLastName] = useState('');
-	const [age, setAge] = useState('loading');
-	const [country, setCountry] = useState('loading');
-	const [city, setCity] = useState('loading');
-	const { id } = useParams();
+export default class Profile extends Component {
+	state = {};
 
-	axios
-		.post('http://localhost:8080/user-service/user', {
-			id: id,
-		})
-		.then((res) => {
-			setUser(JSON.parse(res.data));
-			setFetched(true);
-		});
-
-	useEffect(() => {
-		if (user != undefined) {
-			setFirstName(user['firstName']);
-			setLastName(user['lastName']);
-			setAge(user['age']);
-			setCity(user['city']);
-			setCountry(user['country']);
+	render() {
+		if (!this.props.userProfile) {
+			return (
+				<Loader
+					type='TailSpin'
+					color='#00BFFF'
+					height={80}
+					width={80}
+				/>
+			);
 		}
-	}, [user]);
 
-	return (
-		<div className='container'>
-			<div className='profile-container'>
-				<div className='profile-image-container'>
-					<img src={NoUser} alt='no-user' />
-				</div>
-				<div className='name-div'>
-					<FaArrowRight /> <span>{firstName + ' ' + lastName}</span>
-				</div>
-				<div className='age-div'>
-					<FaArrowRight /> <span>{'Age : ' + age}</span>
-				</div>
-				<div className='country-div'>
-					<ImLocation /> <span>{country}</span>
-				</div>
-				<div className='city-div'>
-					<AiOutlineHome /> <span>{city}</span>
+		let userProfile = JSON.parse(this.props.userProfile);
+		return (
+			<div className='container'>
+				<div className='profile-container'>
+					<div className='profile-image-container'>
+						<img
+							src={
+								'https://codecooler.s3.eu-central-1.amazonaws.com/' +
+								userProfile.profileImage
+							}
+							alt='no-user'
+						/>
+					</div>
+					<div className='name-div'>
+						<FaArrowRight />{' '}
+						<span>
+							{userProfile.firstName + ' ' + userProfile.lastName}
+						</span>
+					</div>
+					<div className='age-div'>
+						<FaArrowRight />{' '}
+						<span>{'Age : ' + userProfile.age}</span>
+					</div>
+					<div className='country-div'>
+						<ImLocation /> <span>{userProfile.country}</span>
+					</div>
+					<div className='city-div'>
+						<TiHome /> <span>{userProfile.city}</span>
+					</div>
 				</div>
 			</div>
-		</div>
-	);
+		);
+	}
 }
